@@ -1,31 +1,37 @@
 name: CI/CD Pipeline
+
 on:
   push:
     branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
-  [cite_start]Build: # Tahap 2.1 [cite: 46]
+  Build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - run: echo "Building..."
 
-  [cite_start]Test: # Tahap 2.2 [cite: 56]
+  Test:
     needs: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - run: python3 test_app.py
 
-  [cite_start]Release: # Tahap 2.3 [cite: 67]
+  Release:
     needs: Test
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - run: echo "Creating Docker Image..."
 
-  [cite_start]Deploy: # Tahap 2.4 [cite: 76]
+  Deploy:
     needs: Release
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - run: echo "Deploying to VM..."
